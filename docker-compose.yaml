@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  svn-server:
+    image: garethflowers/svn-server
+    container_name: svn-server
+    hostname: svn-server
+    ports:
+      - "3690:3690"
+    volumes:
+      - ./svn:/var/opt/svn
+    restart: unless-stopped
+    networks:
+      - migration
+  
+  svn-client:
+    build: ./svn-client
+    container_name: svn-client
+    hostname: svn-client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - svn-server
+    restart: unless-stopped
+    volumes:
+      - ./checkout:/checkout
+    networks:
+      - migration
+
+networks:
+  migration:
+    driver: bridge
+
+  # svn2git:
+  #   image: garethflowers/svn2git
+  #   container_name: svn2git
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./svn/test:/var/opt/svn
+  #   networks:
+  #     - migration
