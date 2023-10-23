@@ -23,6 +23,10 @@ services:
     restart: unless-stopped
     volumes:
       - ./checkout:/checkout
+      - ./gitsvn:/gitsvn
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
     networks:
       - migration
 
